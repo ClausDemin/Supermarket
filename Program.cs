@@ -1,5 +1,4 @@
 ﻿using Supermarket.Infrastructure;
-using Supermarket.Model;
 
 namespace Supermarket
 {
