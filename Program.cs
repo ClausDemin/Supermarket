@@ -18,7 +18,7 @@ namespace Supermarket
 
             var clientsCount = 10;
 
-            vendor.AddClients(clientFactory.CreateClientsQueue(vendor, clientsCount));
+            vendor.Enqueue(clientFactory.CreateClientsQueue(vendor, clientsCount));
 
             while (vendor.ClientsToServe > 0) 
             {

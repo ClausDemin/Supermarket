@@ -1,9 +1,9 @@
-﻿using Supermarket.Infrastructure;
-using Supermarket.Interfaces;
+﻿using Supermarket.Interfaces;
+using Supermarket.Utils;
 
 namespace Supermarket.Model
 {
-    public class Vendor : IHaveInventory<Product>
+    public class Vendor : IHaveProducts
     {
         private Wallet _wallet;
         private Inventory<Product> _availableProducts;
@@ -47,7 +47,7 @@ namespace Supermarket.Model
             }
         }
 
-        public void AddClient(Client client)
+        public void Enqueue(Client client)
         {
             _clients.Enqueue(client);
 
@@ -55,19 +55,19 @@ namespace Supermarket.Model
             client.PaymentComplited += OnPaymentComplited;
         }
 
-        public void AddClients(Queue<Client> clientsQueue) 
+        public void Enqueue(Queue<Client> clientsQueue) 
         {
             while (clientsQueue.Count > 0) 
             { 
-                AddClient(clientsQueue.Dequeue());
+                Enqueue(clientsQueue.Dequeue());
             }
         }
 
         public Product GetRandomItem()
         {
-            var productsAtStorage = GetProductsList();
+            var products = GetProductsList();
 
-            return productsAtStorage[RandomUtils.Random.Next(productsAtStorage.Count)];
+            return products[RandomGenetator.Next(products.Count)];
         }
 
         public void PrintInfo()

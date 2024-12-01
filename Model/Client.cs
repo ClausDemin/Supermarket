@@ -1,5 +1,5 @@
-﻿using Supermarket.Infrastructure;
-using Supermarket.Interfaces;
+﻿using Supermarket.Interfaces;
+using Supermarket.Utils;
 
 namespace Supermarket.Model
 {
@@ -66,7 +66,7 @@ namespace Supermarket.Model
 
             if (productsInStorage != null) 
             {
-                return productsInStorage[RandomUtils.Random.Next(productsInStorage.Count)];
+                return productsInStorage[RandomGenetator.Next(productsInStorage.Count)];
             }
 
             return null;

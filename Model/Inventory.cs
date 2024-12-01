@@ -33,12 +33,11 @@
         {
             if (_items.ContainsKey(item))
             {
-                if (_items[item] > 0)
+                if (_items[item] > amount)
                 {
                     _items[item] -= amount;
                 }
-
-                if (_items[item] == 0)
+                else 
                 {
                     _items.Remove(item);
                 }

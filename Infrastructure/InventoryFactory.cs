@@ -4,14 +4,14 @@ namespace Supermarket.Infrastructure
 {
     public class InventoryFactory
     {
-        ProductsFactory _productsFactory;
+        private ProductsFactory _productsFactory;
 
         public InventoryFactory(ProductsFactory productsFactory)
         {
             _productsFactory = productsFactory;
         }
 
-        public Inventory<Product> CreateVendorInventory()
+        public Inventory<Product> CreateInventory()
         {
             var products = Enum.GetNames(typeof(AvailbaleProducts));
 
