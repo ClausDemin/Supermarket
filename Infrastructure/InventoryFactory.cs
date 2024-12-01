@@ -11,7 +11,7 @@ namespace Supermarket.Infrastructure
             _productsFactory = productsFactory;
         }
 
-        public Inventory<Product> CreateInventory()
+        public Inventory<Product> Create()
         {
             var products = Enum.GetNames(typeof(AvailbaleProducts));
 
@@ -19,7 +19,7 @@ namespace Supermarket.Infrastructure
 
             foreach (var productName in products)
             {
-                inventory.Add(_productsFactory.CreateProduct(productName));
+                inventory.Add(_productsFactory.Create(productName));
             }
 
             return inventory;

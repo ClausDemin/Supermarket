@@ -13,37 +13,38 @@
         public IReadOnlyDictionary<T, int> Items => _items;
         public int ItemsCount { get; private set; }
 
-        public void Add(T item, int count = 1)
+        public void Add(T item, int amount = 1)
         {
-            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(count);
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(amount);
 
             if (_items.ContainsKey(item) == false)
             {
-                _items.Add(item, count);
+                _items.Add(item, amount);
             }
             else
             {
-                _items[item] += count;
+                _items[item] += amount;
             }
 
-            ItemsCount += count;
+            ItemsCount += amount;
         }
 
-        public void Remove(T item, int amount = 1)
+        public void Remove(T item)
         {
             if (_items.ContainsKey(item))
             {
-                if (_items[item] > amount)
+                if (_items[item] > 0)
                 {
-                    _items[item] -= amount;
+                    _items[item]--;
                 }
-                else 
+
+                if (_items[item] == 0)
                 {
                     _items.Remove(item);
                 }
             }
 
-            ItemsCount -= amount;
+            ItemsCount--;
         }
 
         public void Clear()

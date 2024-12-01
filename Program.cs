@@ -14,11 +14,11 @@ namespace Supermarket
 
             VendorFactory vendorFactory = new VendorFactory(inventoryFactory);
 
-            var vendor = vendorFactory.CreateVendor();
+            var vendor = vendorFactory.Create();
 
             var clientsCount = 10;
 
-            vendor.Enqueue(clientFactory.CreateClientsQueue(vendor, clientsCount));
+            vendor.Enqueue(clientFactory.CreateQueue(vendor, clientsCount));
 
             while (vendor.ClientsToServe > 0) 
             {

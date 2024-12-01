@@ -16,18 +16,18 @@ namespace Supermarket.Infrastructure
             {AvailbaleProducts.Spoon, 109.99f }
         };
 
-        public Product CreateProduct(AvailbaleProducts productType)
+        public Product Create(AvailbaleProducts productType)
         {
             var product = new Product(productType.ToString(), _productsData[productType]);
 
             return product;
         }
 
-        public Product CreateProduct(string productName)
+        public Product Create(string productName)
         {
             if (Enum.TryParse<AvailbaleProducts>(productName, out var productType))
             {
-                return CreateProduct(productType);
+                return Create(productType);
             }
 
             return null;

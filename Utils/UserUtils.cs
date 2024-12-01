@@ -1,27 +1,27 @@
 ﻿namespace Supermarket.Utils
 {
-    public static class RandomGenetator
+    public static class UserUtils
     {
-        private static Random random = new Random();
+        private static Random s_random = new Random();
 
         public static int Next(int minValue, int maxValue)
         {
-            return random.Next(minValue, maxValue);
+            return s_random.Next(minValue, maxValue);
         }
 
         public static int Next(int maxValue)
         {
-            return random.Next(maxValue);
+            return s_random.Next(maxValue);
         }
 
         public static float NextSingle(float minValue, float maxValue)
         {
-            return random.NextSingle() * (maxValue - minValue) + minValue;
+            return s_random.NextSingle() * (maxValue - minValue) + minValue;
         }
 
         public static float NextSingle()
         {
-            return random.NextSingle();
+            return s_random.NextSingle();
         }
     }
 }

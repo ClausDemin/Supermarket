@@ -11,9 +11,9 @@ namespace Supermarket.Infrastructure
             _inventoryFactory = inventoryFactory;
         }
 
-        public Vendor CreateVendor(int clientsCount = 10, Queue<Client> clientsQueue = null)
+        public Vendor Create(int clientsCount = 10, Queue<Client> clientsQueue = null)
         {
-            var vendor = new Vendor(_inventoryFactory.CreateInventory(), clientsQueue);
+            var vendor = new Vendor(_inventoryFactory.Create(), clientsQueue);
 
             return vendor; 
         }

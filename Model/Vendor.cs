@@ -67,7 +67,7 @@ namespace Supermarket.Model
         {
             var products = GetProductsList();
 
-            return products[RandomGenetator.Next(products.Count)];
+            return products[UserUtils.Next(products.Count)];
         }
 
         public void PrintInfo()

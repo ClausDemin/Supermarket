@@ -62,11 +62,11 @@ namespace Supermarket.Model
 
         public Product GetRandomItem()
         {
-            var productsInStorage = GetProductsInCart();
+            var products = GetProductsInCart();
 
-            if (productsInStorage != null) 
+            if (products != null) 
             {
-                return productsInStorage[RandomGenetator.Next(productsInStorage.Count)];
+                return products[UserUtils.Next(products.Count)];
             }
 
             return null;
