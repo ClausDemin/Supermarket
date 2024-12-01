@@ -14,9 +14,7 @@ namespace Supermarket.Infrastructure
             var clientWallet = new Wallet(GetRandomMoneyAmount());
             var client = new Client(clientWallet);
 
-            Random random = new Random();
-
-            var productsInCart = random.Next(minProductsInCart, maxProductsInCart);
+            var productsInCart = RandomUtils.Random.Next(minProductsInCart, maxProductsInCart);
 
             while (client.ProductsInCartCount < productsInCart)
             {
@@ -30,9 +28,7 @@ namespace Supermarket.Infrastructure
 
         private float GetRandomMoneyAmount(float minValue = 500f, float maxValue = 2000f)
         {
-            var randomValue = new Random();
-
-            return randomValue.NextSingle(minValue, maxValue);
+            return RandomUtils.Random.NextSingle(minValue, maxValue);
         }
     }
 }

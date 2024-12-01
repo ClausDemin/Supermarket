@@ -1,18 +1,27 @@
-﻿using Supermarket.Interfaces;
+﻿using Supermarket.Infrastructure;
+using Supermarket.Interfaces;
 
 namespace Supermarket.Model
 {
     public class Vendor : IHaveInventory<Product>
     {
         private Wallet _wallet;
-        private Inventory<Product> _storage;
+        private Inventory<Product> _availableProducts;
         private Queue<Client> _clients;
 
-        public Vendor(Inventory<Product> storage, Queue<Client> clients)
+        public Vendor(Inventory<Product> storage, Queue<Client> clients = null)
         {
             _wallet = new Wallet();
-            _storage = storage;
-            _clients = clients;
+            _availableProducts = storage;
+
+            if (clients == null)
+            {
+                _clients = new Queue<Client>();
+            }
+            else
+            {
+                _clients = clients;
+            }
         }
 
         public IEnumerable<Product> ProductsList => GetProductsList();
@@ -26,30 +35,34 @@ namespace Supermarket.Model
 
                 client.PrintInfo();
 
-                bool clientServed = false;
+                bool isClientServed = false;
 
-                while (!clientServed)
+                while (isClientServed == false)
                 {
-                    clientServed = TryServeClient(client);
+                    isClientServed = TryServeClient(client);
                 }
+
+                client.NotEnoughMoney -= OnPaymentFailed;
+                client.PaymentComplited -= OnPaymentComplited;
             }
         }
 
         public void AddClient(Client client)
         {
             _clients.Enqueue(client);
+
+            client.NotEnoughMoney += OnPaymentFailed;
+            client.PaymentComplited += OnPaymentComplited;
         }
 
         public Product GetRandomItem()
         {
-            var random = new Random();
-
             var productsAtStorage = GetProductsList();
 
-            return productsAtStorage[random.Next(productsAtStorage.Count)];
+            return productsAtStorage[RandomUtils.Random.Next(productsAtStorage.Count)];
         }
 
-        public void PrintInfo() 
+        public void PrintInfo()
         {
             string venorInfo = $"Клиентов в очереди: {ClientsToServe}\n" +
                 $"Баланс: {_wallet.Balance}\n";
@@ -57,20 +70,34 @@ namespace Supermarket.Model
             Console.WriteLine(venorInfo);
         }
 
+        private void OnPaymentFailed(Product product)
+        {
+            string itemRemovedInfo = $"Клиенту не хватает денег для покупки. Клиент убирает товар {product.ToString()} из корзины.";
+
+            Console.WriteLine(itemRemovedInfo);
+        }
+
+        private void OnPaymentComplited(float paymentAmount)
+        {
+            string paymentCompleteMessage = $"Клиент оплатил товаров на сумму {paymentAmount}";
+
+            Console.WriteLine(paymentCompleteMessage);
+        }
+
         private bool TryServeClient(Client client)
         {
-            bool paymentCompleted = false;
+            bool isPaymentCompleted = false;
 
             float paymentAmount = GetPaymentAmount(client.ProductsCart);
 
-            paymentCompleted = client.TryMakePayment(paymentAmount);
+            isPaymentCompleted = client.TryMakePayment(paymentAmount);
 
-            if (paymentCompleted)
+            if (isPaymentCompleted)
             {
                 _wallet.AddMoney(paymentAmount);
             }
 
-            return paymentCompleted;
+            return isPaymentCompleted;
         }
 
         private float GetPaymentAmount(IEnumerable<Product> productsCart)
@@ -89,7 +116,7 @@ namespace Supermarket.Model
         {
             var result = new List<Product>();
 
-            foreach (var product in _storage)
+            foreach (var product in _availableProducts)
             {
                 result.Add(product.Key);
             }

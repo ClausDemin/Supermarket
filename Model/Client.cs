@@ -1,4 +1,5 @@
-﻿using Supermarket.Interfaces;
+﻿using Supermarket.Infrastructure;
+using Supermarket.Interfaces;
 
 namespace Supermarket.Model
 {
@@ -15,23 +16,24 @@ namespace Supermarket.Model
             _inventory = new Inventory<Product>();
         }
 
+        public event Action<float>? PaymentComplited;
+        public event Action<Product>? NotEnoughMoney;
+
         public IEnumerable<Product> ProductsCart => GetProductsInCart();
 
         public int ProductsInCartCount => _profuctsCart.ItemsCount;
 
-        public bool TryMakePayment(float payemntAmount)
+        public bool TryMakePayment(float paymentAmount)
         {
-            bool paymentResult = false;
+            bool isSuccesfull = false;
 
-            if (_wallet.TryWithdrawMoney(payemntAmount))
+            if (_wallet.TryWithdrawMoney(paymentAmount))
             {
                 MoveProductsFromCartToInventory();
 
-                paymentResult = true;
+                isSuccesfull = true;
 
-                string paymentCompleteMessage = $"Клиент оплатил товаров на сумму {payemntAmount}";
-
-                Console.WriteLine(paymentCompleteMessage);
+                PaymentComplited?.Invoke(paymentAmount);
             }
             else 
             {
@@ -39,12 +41,10 @@ namespace Supermarket.Model
 
                 RemoveProductFormCart(productToRemove);
 
-                string itemRemovedInfo = $"Клиенту не хватает денег для покупки. Клиент убирает товар {productToRemove.ToString()} из корзины.";
-
-                Console.WriteLine(itemRemovedInfo);
+                NotEnoughMoney?.Invoke(productToRemove);
             }
 
-            return paymentResult;
+            return isSuccesfull;
         }
 
         public void AddProductInCart(Product product)
@@ -62,13 +62,11 @@ namespace Supermarket.Model
 
         public Product GetRandomItem()
         {
-            Random random = new Random();
-
             var productsInStorage = GetProductsInCart();
 
             if (productsInStorage != null) 
             {
-                return productsInStorage[random.Next(productsInStorage.Count)];
+                return productsInStorage[RandomUtils.Random.Next(productsInStorage.Count)];
             }
 
             return null;
