@@ -12,9 +12,13 @@ namespace Supermarket
 
             InventoryFactory inventoryFactory = new InventoryFactory(productsFactory);
 
-            VendorFactory vendorFactory = new VendorFactory(inventoryFactory, clientFactory);
+            VendorFactory vendorFactory = new VendorFactory(inventoryFactory);
 
             var vendor = vendorFactory.CreateVendor();
+
+            var clientsCount = 10;
+
+            vendor.AddClients(clientFactory.CreateClientsQueue(vendor, clientsCount));
 
             while (vendor.ClientsToServe > 0) 
             {

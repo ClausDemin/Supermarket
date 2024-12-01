@@ -26,6 +26,18 @@ namespace Supermarket.Infrastructure
             return client;
         }
 
+        public Queue<Client> CreateClientsQueue(Vendor vendor, int clientsCount)
+        {
+            Queue<Client> clients = new Queue<Client>();
+
+            for (int i = 0; i < clientsCount; i++)
+            {
+                clients.Enqueue(CreateClient(vendor));
+            }
+
+            return clients;
+        }
+
         private float GetRandomMoneyAmount(float minValue = 500f, float maxValue = 2000f)
         {
             return RandomUtils.Random.NextSingle(minValue, maxValue);

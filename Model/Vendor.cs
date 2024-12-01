@@ -55,6 +55,14 @@ namespace Supermarket.Model
             client.PaymentComplited += OnPaymentComplited;
         }
 
+        public void AddClients(Queue<Client> clientsQueue) 
+        {
+            while (clientsQueue.Count > 0) 
+            { 
+                AddClient(clientsQueue.Dequeue());
+            }
+        }
+
         public Product GetRandomItem()
         {
             var productsAtStorage = GetProductsList();
